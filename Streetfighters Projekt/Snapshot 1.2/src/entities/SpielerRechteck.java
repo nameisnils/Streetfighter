@@ -22,10 +22,9 @@ public class SpielerRechteck extends JPanel implements KeyListener {
     public SpielerRechteck() {
         setFocusable(true);
         addKeyListener(this);
-        setBackground(Color.WHITE);
 
-        ImageIcon player1Icon = new ImageIcon("Snapshot 1.2\\bin\\Spieler\\spieler_1_stillstehen.gif"); // Pfad zum gif
-        ImageIcon player2Icon = new ImageIcon("Snapshot 1.2\\bin\\Spieler\\spieler_1_stillstehen.gif");
+        ImageIcon player1Icon = new ImageIcon("Streetfighters Projekt\\Snapshot 1.2\\bin\\Spieler\\spieler_1_stillstehen.gif"); // Pfad zum gif
+        ImageIcon player2Icon = new ImageIcon("Streetfighters Projekt\\Snapshot 1.2\\bin\\Spieler\\spieler_1_stillstehen.gif");
 
         player1Image = player1Icon.getImage().getScaledInstance(width, height, Image.SCALE_DEFAULT);
         player2Image = player2Icon.getImage().getScaledInstance(width, height, Image.SCALE_DEFAULT);
@@ -40,8 +39,14 @@ public class SpielerRechteck extends JPanel implements KeyListener {
 
     public void updateGame() {
         // Spieler 1 Bewegung
-        if (player1Left) player1X -= 10; // Geschwindigkeit
-        if (player1Right) player1X += 10;
+        if (player1Left) {
+            player1X -= 10;
+            System.out.println("Spieler 1 Position: x=" + player1X + " y=" + player1Y);
+        } // Geschwindigkeit
+        if (player1Right) {
+            player1X += 10;
+            System.out.println("Spieler 1 Position: x=" + player1X + " y=" + player1Y);
+        }
 
         // Schwerkraft für Spieler 1
         if (player1Y < groundY) {
@@ -53,38 +58,50 @@ public class SpielerRechteck extends JPanel implements KeyListener {
         }
         player1Y += player1VelocityY;
 
-        if (player1Crouching) player1Y = groundY + 70; // Ducktiefe
+        if (player1Crouching) {
+            player1Y = groundY + 70;
+            System.out.println("Spieler 1 Position: x=" + player1X + " y=" + player1Y);
+        } // Ducktiefe
+
+        if (player1Jumping) {
+            player1Y = groundY - 70;
+            System.out.println("Spieler 1 Position: x=" + player1X + " y=" + player1Y);
+        } // Springen
 
         // Spieler 2 Bewegung
-        if (player2Left) player2X -= 10; // Geschwindigkeit
-        if (player2Right) player2X += 10;
+        if (player2Left) {
+            player2X -= 10;
+            System.out.println("Spieler 2 Position: x=" + player2X + " y=" + player2Y);
+        } 
+        if (player2Right) {
+            player2X += 10;
+            System.out.println("Spieler 2 Position: x=" + player2X + " y=" + player2Y);
+        }
 
         // Schwerkraft für Spieler 2
-        if (player2Y < groundY) {
-            player2VelocityY += gravity;
-        } else {
-            player2Y = groundY;
-            player2VelocityY = 0;
-            player2Jumping = false;
-        }
-        player2Y += player2VelocityY;
+        //if (player2Y < groundY) {
+        //    player2VelocityY += gravity;
+        //} else {
+        //    player2Y = groundY;
+         //   player2VelocityY = 0;
+         //   player2Jumping = false;
+        //}
+        //player2Y += player2VelocityY;
 
-        if (player2Crouching) player2Y = groundY + 70; // Ducktiefe
+        if (player2Crouching) {
+            player2Y = groundY + 70;
+            System.out.println("Spieler 2 Position: x=" + player2X + " y=" + player2Y);
+        } // Ducktiefe
+
+        if (player2Jumping) {
+            player2Y = groundY - 70;
+            System.out.println("Spieler 2 Position: x=" + player2X + " y=" + player2Y);
+        } // Springen
 
         repaint();
     }
 
-    private void jump(int player) {
-        if (player == 1 && !player1Jumping) {
-            player1Jumping = true;
-            player1VelocityY = jumpStrength;
-        }
-
-        if (player == 2 && !player2Jumping) {
-            player2Jumping = true;
-            player2VelocityY = jumpStrength;
-        }
-    }
+    
 
     @Override
     public void keyPressed(KeyEvent e) {
@@ -92,12 +109,12 @@ public class SpielerRechteck extends JPanel implements KeyListener {
 
         if (key == KeyEvent.VK_A) player1Left = true;
         if (key == KeyEvent.VK_D) player1Right = true;
-        if (key == KeyEvent.VK_W) jump(1);
+        if (key == KeyEvent.VK_W) player1Jumping = true;
         if (key == KeyEvent.VK_S) player1Crouching = true;
 
         if (key == KeyEvent.VK_LEFT) player2Left = true;
         if (key == KeyEvent.VK_RIGHT) player2Right = true;
-        if (key == KeyEvent.VK_UP) jump(2);
+        if (key == KeyEvent.VK_UP) player2Jumping = true;
         if (key == KeyEvent.VK_DOWN) player2Crouching = true;
     }
 
@@ -108,10 +125,12 @@ public class SpielerRechteck extends JPanel implements KeyListener {
         if (key == KeyEvent.VK_A) player1Left = false;
         if (key == KeyEvent.VK_D) player1Right = false;
         if (key == KeyEvent.VK_S) player1Crouching = false;
+        if (key == KeyEvent.VK_W) player1Jumping = false;
 
         if (key == KeyEvent.VK_LEFT) player2Left = false;
         if (key == KeyEvent.VK_RIGHT) player2Right = false;
         if (key == KeyEvent.VK_DOWN) player2Crouching = false;
+        if (key == KeyEvent.VK_UP) player2Jumping = false;
     }
 
     @Override
